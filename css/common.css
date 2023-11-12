@@ -7,8 +7,14 @@
 
 html,
 body {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
   margin: 0px;
   padding: 0px;
+  background-color: rgb(240, 240, 240);
+  box-sizing: border-box;
 
 }
 /*--------PALETA DE COLORES--------*/
@@ -61,6 +67,7 @@ body {
     font-size: 22px;
     color: var(--titulos);
     font-family: 'Roboto';
+    
   }
   h3{
     font-size: 18px;
@@ -73,6 +80,7 @@ body {
       margin-top: 50px;
       background-color: var(--fondo-Footer);
       display:flex;
+
   }
 
   footer>img {
@@ -93,12 +101,17 @@ footer>p>a{
   color: var(--texto-footer);
 }
 /*--------HEADER--------*/
-.header-page{
-  Padding: 0.5em;
+header{
   background-color: var( --fondo-Cabecera);
   color: white;
 }
+  
+.header-page{
+  width: 90%;
+}
 .logo{
+  margin-left: 60px;
+  margin-top: 4px;
   width: 150px;
 }
 
@@ -107,7 +120,7 @@ footer>p>a{
   padding: 1px;
   background-color: var(--fondo-Menu);
   list-style: none;
-  align-items: center;
+  align-items: baseline;
   margin: 0px;
   gap: 10px;
 }

@@ -55,6 +55,8 @@ body {
     color: #fff;
     font-size: 10px;
 }
+
+
 /*--------MENSAJES--------*/
 
 .msgexito {
@@ -92,16 +94,15 @@ body {
     font-weight: 200;
     text-align: center;
 }
+
 .table {
     width: 1024px;
     margin: 0 auto 50px auto;
-    border-collapse: collapse;
     border: 1px solid var(--borde-Grilla);
     background-color: rgb(250, 250, 250);
     padding: 30px;
-    border-radius: 15px;
-    overflow: hidden;
-    border: 1px;
+    border-collapse: collapse;
+    border-radius: 1px;
 }
 
 .table thead {
@@ -144,10 +145,10 @@ body {
 .cuadrosInformativos {
     display: flex;
     border-radius: 10px;
-    margin: 3px;
+    margin: 2px;
     height: 70px;
     width: 140px;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.1rem;
     font-size: 12px;
 }
 
@@ -172,7 +173,7 @@ body {
 }
 
 .titulo-contenido {
-    padding-left: 80px;
+    padding-left: 230px;
 }
 
 .partidos {
