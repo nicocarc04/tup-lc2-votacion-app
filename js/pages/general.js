@@ -154,10 +154,10 @@ async function filtrarYConsultar(){
     const electores = document.getElementById('electores');
     const participacion = document.getElementById('participacion-escrutados');
     const titulo = document.getElementById('card-titulo');
-
+    
     mensaje.style.display = "none";
     mensajeAmarillo.style.display = "none";
-
+    
     
     const seleccionCargo = cargosSeleccionados.options[cargosSeleccionados.selectedIndex].text;
     const seleccionDistrito =  distritos.options[distritos.selectedIndex].text;
@@ -180,7 +180,7 @@ async function filtrarYConsultar(){
     // Construir la URL para la solicitud
     
 
-    const url = `https://resultados.mininterior.gob.ar/api/resultados/getResultados?anioEleccion=${PeriodosSelect.value}&tipoRecuento=${tipoRecuento}&tipoEleccion=${tipoEleccion}&categoriaId=${cargosSeleccionados.value}&distritoId=${distritos.value}&seccionProvincialId=${seccionProvin}&seccionId=${seccionSeleccionados.value}&circuitoId=${circuitoId}&mesaId=${mesaId}`;
+    const url = `https://elecciones-lc2.bruselario.com/api/resultados/getResultados/?anioEleccion=2020&tipoRecuento=1&tipoEleccion=1&categoriaId=2&distritoId=1&seccionProvincialId=0&seccionId=3&circuitoId=000039&mesaId=1244${PeriodosSelect.value}&tipoRecuento=${tipoRecuento}&tipoEleccion=${tipoEleccion}&categoriaId=${cargosSeleccionados.value}&distritoId=${distritos.value}&seccionProvincialId=${seccionProvin}&seccionId=${seccionSeleccionados.value}&circuitoId=${circuitoId}&mesaId=${mesaId}`;
     console.log(url)
     try {
         // Realizar la solicitud utilizando fetch

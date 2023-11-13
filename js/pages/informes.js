@@ -1,22 +1,22 @@
 function mostrarInformeAlmacenados() {
-    const informes = obtenerInformesAlmacenados();
-    const tabla = document.getElementById("tablaInforme");
+    const informesAlmacenados = obtenerInformesAlmacenados();
+    //const tabla = document.getElementById("tablaInforme");
     //tabla.innerHTML = "";
-    if (informes.length > 0) {
-        const nuevoArray = informes.map(cadena => cadena.split('|'));
-        nuevoArray.forEach(function (element) {
-            const anio = element[0];
-            const tipoRecuento = element[1];
-            const tipoEleccion = element[2];
-            const categoriaId = element[3];
-            const distritoId = element[4];
-            const seccionProvinciaId = element[5];
-            const seccionId = element[6];
-            const circuitoId = element[7];
-            const mesaId = element[8];
-            const url = `https://resultados.mininterior.gob.ar/api/resultados/getResultados?anioEleccion=${anio}&tipoRecuento=${tipoRecuento}&tipoEleccion=${tipoEleccion}&categoriaId=${categoriaId}&distritoId=${distritoId}&seccionProvincialId=${seccionProvinciaId}&seccionId=${seccionId}&circuitoId=${circuitoId}&mesaId=${mesaId}`;
+    if (informesAlmacenados) {
+        const registroArray = informesAlmacenados.map(cadena => cadena.split('|'));
+        registroArray.forEach(function (resultados) {
+            const vanio = resultados[0];
+            const tipoRecuento = resultados[1];
+            const tipoEleccion = resultados[2];
+            const vcategoriaId = resultados[3];
+            const vdistritoId = resultados[4];
+            const vseccionProvinciaId = resultados[5];
+            const vseccionId = resultados[6];
+            const vcircuitoId = resultados[7];
+            const vmesaId = resultados[8];
+            const url = `https://resultados.mininterior.gob.ar/api/resultados/getResultados?anioEleccion=${vanio}&tipoRecuento=${tipoRecuento}&tipoEleccion=${tipoEleccion}&categoriaId=${vcategoriaId}&distritoId=${vdistritoId}&seccionProvincialId=${vseccionProvinciaId}&seccionId=${vseccionId}&circuitoId=${vcircuitoId}&mesaId=${vmesaId}`;
             console.log(url);
-            crearTabla(url, anio, tipoRecuento, tipoEleccion, categoriaId, distritoId, seccionProvinciaId, seccionId, circuitoId, mesaId);
+            crearTabla(url, vanio, tipoRecuento, tipoEleccion, vcategoriaId, vdistritoId, vseccionProvinciaId, vseccionId, vcircuitoId, vmesaId);
         });
 
 
@@ -25,53 +25,42 @@ function mostrarInformeAlmacenados() {
 }
 mostrarInformeAlmacenados();
 
-async function crearTabla(url, anio, tipoRecuento, tipoEleccion, categoriaId, distritoId, seccionProvinciaId, seccionId, circuitoId, mesaId) {
-    let data2;
+async function crearTabla(url, vanio, tipoRecuento, tipoEleccion, vcategoriaId, vdistritoId, vseccionProvinciaId, vseccionId, vcircuitoId, vmesaId) {
+
     try {
         const response2 = await fetch(url);
-        console.log(respuesta2);
+        console.log(response2);
         if (response2.ok) {
-            data2 = await response2.json();
-            console.log(data2);
-            const estadoRecuento = data2.estadoRecuento;
-            const valoresTotalizadosPositivos = data2.valoresTotalizadosPositivos;
-            document.getElementById("sec-titulo").style.display = "block";
+            const data = await response2.json();
+            console.log(data);
+            //data.estadoRecuento;
+            //data.valoresTotalizadosPositivos;
 
             // Construir datos por agrupación
-            const datosAgrupacion = construirDatosPorAgrupacion(valoresTotalizadosPositivos);
-
-
-                function construirTitulo(anio, tipoEleccion) {
-                    if (tipoEleccion == 1) {
-                        tipoEleccion = "PASO";
-                    } else {
-                        tipoEleccion = "GENERALES";
-                    }
+            //const datosAgrupacion = construirDatosPorAgrupacion(data.valoresTotalizadosPositivos);
+            if (tipoEleccion == 1) {
+                tipoEleccion = "PASO";
+            } else {
+                tipoEleccion = "GENERALES";
+            }
                 
-                    const contenedorTitulo = document.createElement("div");
+            const contenedorTitulo = document.createElement("div");
                 
-                    const titulo = document.createElement("p");
-                    titulo.classList.add("texto-elecciones-chico");
-                    titulo.innerHTML = `Elecciones ${anio} | ${tipoEleccion}`;
+            const titulo = document.createElement("p");
+            titulo.classList.add("texto-elecciones-chico");
+            titulo.innerHTML = `Elecciones ${vanio} | ${tipoEleccion}`;
                 
-                    const subtitulo = document.createElement("p");
-                    subtitulo.classList.add("texto-path-chico");
-                    subtitulo.innerHTML = `${anio} > ${tipoEleccion} > ${categoriaId} > ${distritoId} > ${seccionId}`;
+            const subtitulo = document.createElement("p");
+            subtitulo.classList.add("texto-path-chico");
+            subtitulo.innerHTML = `${vanio} > ${tipoEleccion} > ${vcategoriaId} > ${vdistritoId} > ${vseccionId}`;
                 
-                    contenedorTitulo.appendChild(titulo);
-                    contenedorTitulo.appendChild(subtitulo);
-                
-                    return contenedorTitulo;
-                };
-            
-
-            
-            
-                function construirDatosGenerales(estadoRecuento) {
-                    const divEstados = document.createElement("div");
-                    divEstados.classList.add("cajaRecuadros");
-                    divEstados.innerHTML = `
-                    <div class="recuadrosInformativos mesas">
+            contenedorTitulo.appendChild(titulo);
+            contenedorTitulo.appendChild(subtitulo);
+        
+            const divEstados = document.createElement("div");
+            divEstados.classList.add("cajcuadros");
+            divEstados.innerHTML = `
+                    <div class="cuadrosInformativos mesas-escrutadas">
                             <div>
                                 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="841.889px"
@@ -120,7 +109,7 @@ async function crearTabla(url, anio, tipoRecuento, tipoEleccion, categoriaId, di
                             </div>
                             <div>
                                 <p>Mesas computadas</p>
-                                <p>${estadoRecuento.mesasTotalizadas}</p>
+                                <p>${data.estadoRecuento.mesasTotalizadas}</p>
                             </div>
                         </div>
                         <div class="recuadrosInformativos electores">
@@ -214,7 +203,7 @@ async function crearTabla(url, anio, tipoRecuento, tipoEleccion, categoriaId, di
                             </div>
                             <div>
                                 <p>Electores</p>
-                                <p>${estadoRecuento.cantidadElectores}</p>
+                                <p>${data.estadoRecuento.cantidadElectores}</p>
                             </div>
                         </div>
                         <div class="recuadrosInformativos participacion">
@@ -275,47 +264,66 @@ async function crearTabla(url, anio, tipoRecuento, tipoEleccion, categoriaId, di
                             </div>
                             <div>
                                 <p>Participacion sobre escrutado</p>
-                                <p>${estadoRecuento.participacionPorcentaje}</p>
+                                <p>${data.estadoRecuento.participacionPorcentaje}</p>
                             </div>
                         </div>
                     `
-                
-                    return divEstados
-                }
+                    const datosAgrupacion = document.createElement("td");
+                    const datosAgrupacion2 = document.createElement("td")
+                    data.valoresTotalizadosPositivos.forEach((agrupacion) => {
+                        const contenedorPartidos = document.createElement("p");
+                        contenedorPartidos.classList.add("partidos");
+
+                        const nombreListaElement = document.createElement("p");
+                        nombreListaElement.classList.add("partidos");
+                        nombreListaElement.textContent = agrupacion.nombreAgrupacion;
+
+                        const porcentajeListaElement = document.createElement("p");
+                        porcentajeListaElement.classList.add("votos");
+                        porcentajeListaElement.textContent = `${agrupacion.votosPorcentaje}%`;
+
+                        const votosListaElement = document.createElement("p");
+                        votosListaElement.classList.add("votos");
+                        votosListaElement.textContent = `${agrupacion.votos} Votos`;
+
+                        datosAgrupacion2.appendChild(porcentajeListaElement);
+                        datosAgrupacion2.appendChild(votosListaElement);
+
+                        datosAgrupacion.appendChild(contenedorPartidos);
+                        datosAgrupacion.appendChild(nombreListaElement)
+                        datosAgrupacion2.appendChild(porcentajeListaElement);
+                        datosAgrupacion2.appendChild(votosListaElement);
+                    }) 
             
                 const nuevaFila = document.createElement("tr");
-                const tbodyGrilla = document.getElementById("tbodyGrilla");
+                const tbodyGrilla = document.getElementById("table-tbody");
             
             
                 // PROVINCIA
-                const provinciaCell = document.createElement("th");
-                provinciaCell.innerHTML = mostrarMapa(distritoId); // Reemplazar con el dato real
+                const provinciaCell = document.createElement("td");
+                provinciaCell.innerHTML = mapasProvincia[vdistritoId]; // Reemplazar con el dato real
                 nuevaFila.appendChild(provinciaCell);
             
                 // ELECCIÓN
-                const eleccionCell = document.createElement("th");
-                eleccionCell.appendChild(construirTitulo(anio, tipoEleccion));
+                const eleccionCell = document.createElement("td");
+                eleccionCell.appendChild(contenedorTitulo);
                 nuevaFila.appendChild(eleccionCell);
-                eleccionCell.classList.add("eleccion")
+                eleccionCell.classList.add("elecciones-generales")
             
                 // DATOS GENERALES
-                const datosGeneralesCell = document.createElement("th");
-                const datosGeneralesDiv = construirDatosGenerales(estadoRecuento);
-                datosGeneralesCell.appendChild(datosGeneralesDiv);
+                const datosGeneralesCell = document.createElement("td");
+                datosGeneralesCell.appendChild(divEstados);
                 nuevaFila.appendChild(datosGeneralesCell);
-                datosGeneralesCell.classList.add("datosGenerales")
+                datosGeneralesCell.classList.add("cuadrosInformativos", "mesas-escrutadas")
             
                 // DATOS POR AGRUPACIÓN
-                const datosAgrupacionCell = construirDatosPorAgrupacion(valoresTotalizadosPositivos);
-                const thContenedor = document.createElement("th");
-                thContenedor.appendChild(datosAgrupacionCell);
-                nuevaFila.appendChild(thContenedor);
-                datosAgrupacionCell.classList.add("datosAgrupacion")
+                nuevaFila.appendChild(datosAgrupacion);
+                nuevaFila.appendChild(datosAgrupacion2)
             
             
                 // Agregar la nueva fila al tbody
                 tbodyGrilla.appendChild(nuevaFila);
-                tbodyGrilla.classList.add("tbodyGrilla")
+                tbodyGrilla.classList.add("table-tbody")
             
             
             
@@ -327,39 +335,9 @@ async function crearTabla(url, anio, tipoRecuento, tipoEleccion, categoriaId, di
 
     
         
-    };
+};
 
 
-function construirDatosPorAgrupacion(valoresTotalizadosPositivos) {
-    const datosAgrupacion = document.createElement("th");
-    datosAgrupacion.classList.add("grid-agrupacion");
+  
 
-    valoresTotalizadosPositivos.forEach(agrupacion => {
-        const contenedorPartidos = document.createElement("div");
-        contenedorPartidos.classList.add("partidos");
-
-        const nombreListaElement = document.createElement("p");
-        nombreListaElement.classList.add("subTitulo");
-        nombreListaElement.textContent = agrupacion.nombreAgrupacion;
-
-        contenedorPartidos.appendChild(nombreListaElement);
-
-        const contenedorPorcentajeVotos = document.createElement("div");
-
-        const porcentajeListaElement = document.createElement("p");
-        porcentajeListaElement.classList.add("peso");
-        porcentajeListaElement.textContent = `${agrupacion.votosPorcentaje}%`;
-
-        const votosListaElement = document.createElement("p");
-        votosListaElement.classList.add("peso");
-        votosListaElement.textContent = `${agrupacion.votos} Votos`;
-
-        contenedorPorcentajeVotos.appendChild(porcentajeListaElement);
-        contenedorPorcentajeVotos.appendChild(votosListaElement);
-
-        datosAgrupacion.appendChild(contenedorPartidos);
-        datosAgrupacion.appendChild(contenedorPorcentajeVotos);
-    });
-
-    return datosAgrupacion;
-}
+ 
