@@ -1,31 +1,25 @@
-function mostrarInformeAlmacenados() {
-    const informesAlmacenados = obtenerInformesAlmacenados();
-    //const tabla = document.getElementById("tablaInforme");
-    //tabla.innerHTML = "";
-    if (informesAlmacenados) {
-        const registroArray = informesAlmacenados.map(cadena => cadena.split('|'));
+const informesGuardados = obtenerInformes();
+    if (informesGuardados) {
+        const registroArray = informesGuardados.map(cadena => cadena.split('|'));
         registroArray.forEach(function (resultados) {
-            const vanio = resultados[0];
+            const anio = resultados[0];
             const tipoRecuento = resultados[1];
             const tipoEleccion = resultados[2];
-            const vcategoriaId = resultados[3];
-            const vdistritoId = resultados[4];
-            const vseccionProvinciaId = resultados[5];
-            const vseccionId = resultados[6];
-            const vcircuitoId = resultados[7];
-            const vmesaId = resultados[8];
-            const url = `https://resultados.mininterior.gob.ar/api/resultados/getResultados?anioEleccion=${vanio}&tipoRecuento=${tipoRecuento}&tipoEleccion=${tipoEleccion}&categoriaId=${vcategoriaId}&distritoId=${vdistritoId}&seccionProvincialId=${vseccionProvinciaId}&seccionId=${vseccionId}&circuitoId=${vcircuitoId}&mesaId=${vmesaId}`;
+            const categoriaId = resultados[3];
+            const distritoId = resultados[4];
+            const seccionProvinciaId = resultados[5];
+            const seccionId = resultados[6];
+            const circuitoId = resultados[7];
+            const mesaId = resultados[8];
+            const url = `https://resultados.mininterior.gob.ar/api/resultados/getResultados?anioEleccion=${anio}&tipoRecuento=${tipoRecuento}&tipoEleccion=${tipoEleccion}&categoriaId=${categoriaId}&distritoId=${distritoId}&seccionProvincialId=${seccionProvinciaId}&seccionId=${seccionId}&circuitoId=${circuitoId}&mesaId=${mesaId}`;
             console.log(url);
-            crearTabla(url, vanio, tipoRecuento, tipoEleccion, vcategoriaId, vdistritoId, vseccionProvinciaId, vseccionId, vcircuitoId, vmesaId);
+            mostrarInformes(url, anio, tipoRecuento, tipoEleccion, categoriaId, distritoId, seccionProvinciaId, seccionId, circuitoId, mesaId);
         });
 
 
-    };
-    //else: mensaje de error en amarillo
-}
-mostrarInformeAlmacenados();
+};
 
-async function crearTabla(url, vanio, tipoRecuento, tipoEleccion, vcategoriaId, vdistritoId, vseccionProvinciaId, vseccionId, vcircuitoId, vmesaId) {
+async function mostrarInformes(url, anio, tipoRecuento, tipoEleccion, categoriaId, distritoId, seccionProvinciaId, seccionId, circuitoId, mesaId) {
 
     try {
         const response2 = await fetch(url);
@@ -33,33 +27,28 @@ async function crearTabla(url, vanio, tipoRecuento, tipoEleccion, vcategoriaId, 
         if (response2.ok) {
             const data = await response2.json();
             console.log(data);
-            //data.estadoRecuento;
-            //data.valoresTotalizadosPositivos;
 
-            // Construir datos por agrupación
-            //const datosAgrupacion = construirDatosPorAgrupacion(data.valoresTotalizadosPositivos);
             if (tipoEleccion == 1) {
                 tipoEleccion = "PASO";
             } else {
                 tipoEleccion = "GENERALES";
             }
                 
-            const contenedorTitulo = document.createElement("div");
+            const GrillaElecciones = document.createElement("div");
                 
             const titulo = document.createElement("p");
             titulo.classList.add("texto-elecciones-chico");
-            titulo.innerHTML = `Elecciones ${vanio} | ${tipoEleccion}`;
-                
+            titulo.innerHTML = `Elecciones ${anio} | ${tipoEleccion}`;
             const subtitulo = document.createElement("p");
             subtitulo.classList.add("texto-path-chico");
-            subtitulo.innerHTML = `${vanio} > ${tipoEleccion} > ${vcategoriaId} > ${vdistritoId} > ${vseccionId}`;
+            subtitulo.innerHTML = `${anio} > <br> ${tipoEleccion} > <br> ${categoriaId} > <br> ${distritoId} > <br> ${seccionId}`;
                 
-            contenedorTitulo.appendChild(titulo);
-            contenedorTitulo.appendChild(subtitulo);
+            GrillaElecciones.appendChild(titulo);
+            GrillaElecciones.appendChild(subtitulo);
         
-            const divEstados = document.createElement("div");
-            divEstados.classList.add("cajcuadros");
-            divEstados.innerHTML = `
+            const CuadrosGenerales = document.createElement("div");
+            CuadrosGenerales.classList.add("cajcuadros");
+            CuadrosGenerales.innerHTML = `
                     <div class="cuadrosInformativos mesas-escrutadas">
                             <div>
                                 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +101,7 @@ async function crearTabla(url, vanio, tipoRecuento, tipoEleccion, vcategoriaId, 
                                 <p>${data.estadoRecuento.mesasTotalizadas}</p>
                             </div>
                         </div>
-                        <div class="recuadrosInformativos electores">
+                        <div class="cuadrosInformativos electores">
                             <div>
                                 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="841.889px"
@@ -206,7 +195,7 @@ async function crearTabla(url, vanio, tipoRecuento, tipoEleccion, vcategoriaId, 
                                 <p>${data.estadoRecuento.cantidadElectores}</p>
                             </div>
                         </div>
-                        <div class="recuadrosInformativos participacion">
+                        <div class="cuadrosInformativos escrutado">
                             <div>
                                 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="841.889px"
@@ -268,73 +257,65 @@ async function crearTabla(url, vanio, tipoRecuento, tipoEleccion, vcategoriaId, 
                             </div>
                         </div>
                     `
-                    const datosAgrupacion = document.createElement("td");
-                    const datosAgrupacion2 = document.createElement("td")
-                    data.valoresTotalizadosPositivos.forEach((agrupacion) => {
-                        const contenedorPartidos = document.createElement("p");
-                        contenedorPartidos.classList.add("partidos");
+                    const CuadroAgrupacion = document.createElement("td");
+                    CuadroAgrupacion.colSpan = 2
+                    const CuadroAgrupacion2 = document.createElement("td")
+                    data.valoresTotalizadosPositivos.forEach((partido) => {
+                        const parrafosPartidos = document.createElement("p");
+                        
+                        parrafosPartidos.classList.add("partidos");
 
-                        const nombreListaElement = document.createElement("p");
-                        nombreListaElement.classList.add("partidos");
-                        nombreListaElement.textContent = agrupacion.nombreAgrupacion;
+                        const nombrePartido = document.createElement("p");
+                        nombrePartido.classList.add("partidos");
+                        nombrePartido.textContent = partido.nombreAgrupacion;
 
-                        const porcentajeListaElement = document.createElement("p");
-                        porcentajeListaElement.classList.add("votos");
-                        porcentajeListaElement.textContent = `${agrupacion.votosPorcentaje}%`;
+                        const porcentajePartidos = document.createElement("p");
+                        porcentajePartidos.classList.add("votos");
+                        porcentajePartidos.textContent = `${partido.votosPorcentaje}%`;
 
-                        const votosListaElement = document.createElement("p");
-                        votosListaElement.classList.add("votos");
-                        votosListaElement.textContent = `${agrupacion.votos} Votos`;
+                        const votospartidos = document.createElement("p");
+                        votospartidos.classList.add("votos");
+                        votospartidos.textContent = `${partido.votos} Votos`;
 
-                        datosAgrupacion2.appendChild(porcentajeListaElement);
-                        datosAgrupacion2.appendChild(votosListaElement);
+        
 
-                        datosAgrupacion.appendChild(contenedorPartidos);
-                        datosAgrupacion.appendChild(nombreListaElement)
-                        datosAgrupacion2.appendChild(porcentajeListaElement);
-                        datosAgrupacion2.appendChild(votosListaElement);
+                        CuadroAgrupacion.appendChild(parrafosPartidos);
+                        CuadroAgrupacion.appendChild(nombrePartido)
+                        CuadroAgrupacion2.appendChild(porcentajePartidos );
+                        CuadroAgrupacion2.appendChild(votospartidos);
                     }) 
             
-                const nuevaFila = document.createElement("tr");
-                const tbodyGrilla = document.getElementById("table-tbody");
+                const trPrincipal = document.createElement("tr");
+                const tbody = document.getElementById("table-tbody");
             
-            
-                // PROVINCIA
                 const provinciaCell = document.createElement("td");
-                provinciaCell.innerHTML = mapasProvincia[vdistritoId]; // Reemplazar con el dato real
-                nuevaFila.appendChild(provinciaCell);
+                provinciaCell.innerHTML = mapasProvincia[distritoId]; 
+                trPrincipal.appendChild(provinciaCell);
             
-                // ELECCIÓN
+                
                 const eleccionCell = document.createElement("td");
-                eleccionCell.appendChild(contenedorTitulo);
-                nuevaFila.appendChild(eleccionCell);
-                eleccionCell.classList.add("elecciones-generales")
+                eleccionCell.appendChild(GrillaElecciones);
+                trPrincipal.appendChild(eleccionCell);
+                
             
-                // DATOS GENERALES
+                
                 const datosGeneralesCell = document.createElement("td");
-                datosGeneralesCell.appendChild(divEstados);
-                nuevaFila.appendChild(datosGeneralesCell);
-                datosGeneralesCell.classList.add("cuadrosInformativos", "mesas-escrutadas")
+                datosGeneralesCell.appendChild(CuadrosGenerales);
+                trPrincipal.appendChild(datosGeneralesCell);
+                
             
-                // DATOS POR AGRUPACIÓN
-                nuevaFila.appendChild(datosAgrupacion);
-                nuevaFila.appendChild(datosAgrupacion2)
-            
-            
-                // Agregar la nueva fila al tbody
-                tbodyGrilla.appendChild(nuevaFila);
-                tbodyGrilla.classList.add("table-tbody")
+                
+                trPrincipal.appendChild(CuadroAgrupacion);
+                trPrincipal.appendChild(CuadroAgrupacion2)
             
             
-            
-            
+                tbody.appendChild(trPrincipal);
+                tbody.classList.add("table-tbody")
+
         }
     } catch (error2) {
         console.error(error2);
-    }       
-
-    
-        
+    }          
 };
 
 
