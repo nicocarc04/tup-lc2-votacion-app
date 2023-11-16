@@ -1,27 +1,35 @@
+// Se obtienen los informes
 const informesGuardados = obtenerInformes();
-    if (informesGuardados) {
-        const registroArray = informesGuardados.map(cadena => cadena.split('|'));
-        registroArray.forEach(function (resultados) {
-            const anio = resultados[0];
-            const tipoRecuento = resultados[1];
-            const tipoEleccion = resultados[2];
-            const categoriaId = resultados[3];
-            const distritoId = resultados[4];
-            const seccionProvinciaId = resultados[5];
-            const seccionId = resultados[6];
-            const circuitoId = resultados[7];
-            const mesaId = resultados[8];
-            const url = `https://resultados.mininterior.gob.ar/api/resultados/getResultados?anioEleccion=${anio}&tipoRecuento=${tipoRecuento}&tipoEleccion=${tipoEleccion}&categoriaId=${categoriaId}&distritoId=${distritoId}&seccionProvincialId=${seccionProvinciaId}&seccionId=${seccionId}&circuitoId=${circuitoId}&mesaId=${mesaId}`;
-            console.log(url);
-            mostrarInformes(url, anio, tipoRecuento, tipoEleccion, categoriaId, distritoId, seccionProvinciaId, seccionId, circuitoId, mesaId);
-        });
 
+// Se verifica si hay informes
+if (informesGuardados) {
+    // Se mapea cada cadena de informe y se divide por '|'
+    const registroArray = informesGuardados.map(cadena => cadena.split('|'));
 
-};
+    // Se itera sobre cada conjunto de resultados
+    registroArray.forEach(function (resultados) {
+        // Se extraen variables específicas de cada resultado
+        const anio = resultados[0];
+        const tipoRecuento = resultados[1];
+        const tipoEleccion = resultados[2];
+        const categoriaId = resultados[3];
+        const distritoId = resultados[4];
+        const seccionProvinciaId = resultados[5];
+        const seccionId = resultados[6];
+        const circuitoId = resultados[7];
+        const mesaId = resultados[8]
+        const url = `https://resultados.mininterior.gob.ar/api/resultados/getResultados?anioEleccion=${anio}&tipoRecuento=${tipoRecuento}&tipoEleccion=${tipoEleccion}&categoriaId=${categoriaId}&distritoId=${distritoId}&seccionProvincialId=${seccionProvinciaId}&seccionId=${seccionId}&circuitoId=${circuitoId}&mesaId=${mesaId}`;
+
+        // Se llama a la función mostrarInformes con los parámetros relevantes
+        mostrarInformes(url, anio, tipoRecuento, tipoEleccion, categoriaId, distritoId, seccionProvinciaId, seccionId, circuitoId, mesaId);
+    });
+}
+
 
 async function mostrarInformes(url, anio, tipoRecuento, tipoEleccion, categoriaId, distritoId, seccionProvinciaId, seccionId, circuitoId, mesaId) {
 
     try {
+        // Realiza una solicitud HTTP usando la función fetch con la URL proporcionada.
         const response2 = await fetch(url);
         console.log(response2);
         if (response2.ok) {
@@ -35,7 +43,7 @@ async function mostrarInformes(url, anio, tipoRecuento, tipoEleccion, categoriaI
             }
                 
             const GrillaElecciones = document.createElement("div");
-                
+      
             const titulo = document.createElement("p");
             titulo.classList.add("texto-elecciones-chico");
             titulo.innerHTML = `Elecciones ${anio} | ${tipoEleccion}`;
@@ -45,7 +53,7 @@ async function mostrarInformes(url, anio, tipoRecuento, tipoEleccion, categoriaI
                 
             GrillaElecciones.appendChild(titulo);
             GrillaElecciones.appendChild(subtitulo);
-        
+            //carga de los cuadros de mesas , electores y participacion sobre escrutado
             const CuadrosGenerales = document.createElement("div");
             CuadrosGenerales.classList.add("cajcuadros");
             CuadrosGenerales.innerHTML = `
@@ -257,6 +265,7 @@ async function mostrarInformes(url, anio, tipoRecuento, tipoEleccion, categoriaI
                             </div>
                         </div>
                     `
+                    //Carga de la columna datos por agrupacion
                     const CuadroAgrupacion = document.createElement("td");
                     CuadroAgrupacion.colSpan = 2
                     const CuadroAgrupacion2 = document.createElement("td")
@@ -284,31 +293,31 @@ async function mostrarInformes(url, anio, tipoRecuento, tipoEleccion, categoriaI
                         CuadroAgrupacion2.appendChild(porcentajePartidos );
                         CuadroAgrupacion2.appendChild(votospartidos);
                     }) 
-            
+                //Carga de la tabla
                 const trPrincipal = document.createElement("tr");
                 const tbody = document.getElementById("table-tbody");
-            
+                //mostrar la provincia (mapa)
                 const provinciaCell = document.createElement("td");
                 provinciaCell.innerHTML = mapasProvincia[distritoId]; 
                 trPrincipal.appendChild(provinciaCell);
             
-                
+                //mostrar eleccion
                 const eleccionCell = document.createElement("td");
                 eleccionCell.appendChild(GrillaElecciones);
                 trPrincipal.appendChild(eleccionCell);
                 
             
-                
+                //mostar cuadros de mensajes
                 const datosGeneralesCell = document.createElement("td");
                 datosGeneralesCell.appendChild(CuadrosGenerales);
                 trPrincipal.appendChild(datosGeneralesCell);
                 
             
-                
+                //agregar a la fila principal
                 trPrincipal.appendChild(CuadroAgrupacion);
                 trPrincipal.appendChild(CuadroAgrupacion2)
             
-            
+                //agregar todo al contenido principal de la tabla (en el body)
                 tbody.appendChild(trPrincipal);
                 tbody.classList.add("table-tbody")
 

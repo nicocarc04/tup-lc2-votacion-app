@@ -9,12 +9,13 @@ const nombreElemento = document.getElementById('nombreMapa');
 var selectedDistrito
 var DatosMenu;
 
+//Constante para establecer los colores por id de agrupacion
 const colores= {
-    36: {colorPleno: "var(--grafica-amarillo)",colorLiviano:"var(--grafica-amarillo-claro)"},
-    87: {colorPleno: "var(--grafica-celeste)",colorLiviano:"var(--grafica-celeste-claro)"},
-    13:{colorPleno: "var(--grafica-bordo)",colorLiviano:"var(--grafica-bordo-claro)"},
-    135:{colorPleno: "var(--grafica-lila)",colorLiviano:"var(--grafica-lila-claro)"},
-    57:{colorPleno: "var(--grafica-verde)",colorLiviano:"var(--grafica-verde-claro)"},
+    503: {colorPleno: "var(--grafica-amarillo)",colorLiviano:"var(--grafica-amarillo-claro)"},
+    505: {colorPleno: "var(--grafica-celeste)",colorLiviano:"var(--grafica-celeste-claro)"},
+    504:{colorPleno: "var(--grafica-bordo)",colorLiviano:"var(--grafica-bordo-claro)"},
+    501:{colorPleno: "var(--grafica-lila)",colorLiviano:"var(--grafica-lila-claro)"},
+    502:{colorPleno: "var(--grafica-verde)",colorLiviano:"var(--grafica-verde-claro)"},
     132:{colorPleno: "var(--grafica-amarillo)",colorLiviano:"var(--grafica-amarillo-claro)"},
     134:{colorPleno: "var(--grafica-celeste)",colorLiviano:"var(--grafica-celeste-claro)"},
     136:{colorPleno: "var(--grafica-bordo)",colorLiviano:"var(--grafica-bordo-claro)"},
@@ -189,7 +190,7 @@ async function filtrarYConsultar(){
             const data = await response.json();
             console.log(data);
             const mensajeAmarillo = document.getElementById("card-menu");
-            mensajeAmarillo.innerHTML = ""; // Limpia cualquier mensaje anterior
+            mensajeAmarillo.innerHTML = ""; 
             
             contenido.style.display='flex'; 
             cuadros.style.display='flex';
@@ -291,7 +292,6 @@ async function filtrarYConsultar(){
             const max = 7;
     
             valoresTotalizadosPositivos.slice(0, max).forEach((valor) => {
-              // ... (código existente para obtener datos de la agrupación política)
               if (colores[valor.idAgrupacion]){
                 colorPleno = colores[valor.idAgrupacion].colorPleno
               } else {

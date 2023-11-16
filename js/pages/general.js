@@ -6,15 +6,15 @@ const distritos = document.getElementById('distrito');
 const seccionSeleccionados = document.getElementById('seccion');
 const mapaElemento = document.getElementById('mapaElement');
 const nombreElemento = document.getElementById('nombreMapa');
-var selectedDistrito
 var DatosMenu;
 
+//Constante para establecer los colores por id de agrupacion
 const colores= {
-    36: {colorPleno: "var(--grafica-amarillo)",colorLiviano:"var(--grafica-amarillo-claro)"},
-    87: {colorPleno: "var(--grafica-celeste)",colorLiviano:"var(--grafica-celeste-claro)"},
-    13:{colorPleno: "var(--grafica-bordo)",colorLiviano:"var(--grafica-bordo-claro)"},
-    135:{colorPleno: "var(--grafica-lila)",colorLiviano:"var(--grafica-lila-claro)"},
-    57:{colorPleno: "var(--grafica-verde)",colorLiviano:"var(--grafica-verde-claro)"},
+    503: {colorPleno: "var(--grafica-amarillo)",colorLiviano:"var(--grafica-amarillo-claro)"},
+    505: {colorPleno: "var(--grafica-celeste)",colorLiviano:"var(--grafica-celeste-claro)"},
+    504:{colorPleno: "var(--grafica-bordo)",colorLiviano:"var(--grafica-bordo-claro)"},
+    501:{colorPleno: "var(--grafica-lila)",colorLiviano:"var(--grafica-lila-claro)"},
+    502:{colorPleno: "var(--grafica-verde)",colorLiviano:"var(--grafica-verde-claro)"},
     132:{colorPleno: "var(--grafica-amarillo)",colorLiviano:"var(--grafica-amarillo-claro)"},
     134:{colorPleno: "var(--grafica-celeste)",colorLiviano:"var(--grafica-celeste-claro)"},
     136:{colorPleno: "var(--grafica-bordo)",colorLiviano:"var(--grafica-bordo-claro)"},
@@ -26,7 +26,7 @@ const colores= {
 
 
 
-
+//carga de Periodos
 fetch("https://resultados.mininterior.gob.ar/api/menu/periodos")
     .then(res => res.json())
     .then(data => {
@@ -46,7 +46,7 @@ fetch("https://resultados.mininterior.gob.ar/api/menu/periodos")
 
 
 
-
+//funcion para mostrar los cargos
 
 function cargoSelect() {
 
@@ -77,7 +77,7 @@ function cargoSelect() {
         alert("Seleccione la opcion anterior..")
     }
 }
-
+//funcion para distritos 
  function distritoSelect() {
     if (cargosSeleccionados.value != "-") {
         const eleccionesGenerales = DatosMenu.filter(eleccion => eleccion.IdEleccion === tipoEleccion);
@@ -103,12 +103,7 @@ function cargoSelect() {
 
 
    
-
-
-
-
-
-
+//funcion para seccion 
  function seccionSelect() {
 
     if (distritos.value != "-") {
@@ -138,48 +133,50 @@ function cargoSelect() {
         alert("Seleccione la opcion anterior..")
     }
 }
-
+//MENSAJE QUE APARECE ANTES DE FILTRAR 
 const mensajeAmarillo = document.getElementById("card-menu");
 const mensaje = document.createElement("div");
 mensaje.innerText = "Debe seleccionar los valores a filtrar y hacer clic en el botón FILTRAR";
 mensaje.style.backgroundColor = "var(--mensaje-usuario-amarillo)";
 mensajeAmarillo.appendChild(mensaje);
-
+//VARTIABLES PARA MOSTRAR EL MAPA Y CUADROS
 var contenido = document.getElementById('sec-contenido');
 var cuadros = document.getElementById('sec-cuadros');
 var mapas = document.getElementById('cuadros mapabox');
+//FUNCION ASINCRONA AL FILTRAR CONSULTA DESDE LA API Y MUESTRA EN PANTALLA LOS DATOS
 async function filtrarYConsultar(){
 
     const mesas = document.getElementById('card-mesas');
     const electores = document.getElementById('electores');
     const participacion = document.getElementById('participacion-escrutados');
     const titulo = document.getElementById('card-titulo');
-    
-    mensaje.style.display = "none";
-    mensajeAmarillo.style.display = "none";
-    
-    
+
+    // Obtener el texto de la opción seleccionada en el elemento <select> de cargos
     const seleccionCargo = cargosSeleccionados.options[cargosSeleccionados.selectedIndex].text;
+
+    // Obtener el texto de la opción seleccionada en el elemento <select> de distritos
     const seleccionDistrito =  distritos.options[distritos.selectedIndex].text;
+
+    // Obtener el texto de la opción seleccionada en el elemento <select> de secciones
     const seleccionSeccion = seccionSeleccionados.options[seccionSeleccionados.selectedIndex].text;
 
-
+    //VALIDACION DE QUE HAYA SELECCIONADO TODOS LOS CAMPOS
     var htmlCard
     if (PeriodosSelect.value == '-' || cargosSeleccionados.value == "-" || distritos.value == "-" || seccionSeleccionados.value == '-') {
         alert("Falta seleccionar uno o más campos. Por favor, complete todos los campos");
-        
         return;
+    }else{
+        //AL FILTRAR EL MENSAJE AMARILLO DESAPARECE
+        mensaje.style.display = "none";
+        mensajeAmarillo.style.display = "none";
     }
 
     // Parámetros por defecto
-    //const categoriaId = 2;
     const circuitoId = "";
     const mesaId = "";
     const seccionProvin = ''
     
     // Construir la URL para la solicitud
-    
-
     const url = `https://resultados.mininterior.gob.ar/api/resultados/getResultados?anioEleccion=${PeriodosSelect.value}&tipoRecuento=${tipoRecuento}&tipoEleccion=${tipoEleccion}&categoriaId=${cargosSeleccionados.value}&distritoId=${distritos.value}&seccionProvincialId=${seccionProvin}&seccionId=${seccionSeleccionados.value}&circuitoId=${circuitoId}&mesaId=${mesaId}`;
     console.log(url)
     try {
@@ -191,12 +188,11 @@ async function filtrarYConsultar(){
             const data = await response.json();
             console.log(data);
             const mensajeAmarillo = document.getElementById("card-menu");
-            mensajeAmarillo.innerHTML = ""; // Limpia cualquier mensaje anterior
-            
+            mensajeAmarillo.innerHTML = ""; 
+            //mostrar el cuadro con el contenido
             contenido.style.display='flex'; 
             cuadros.style.display='flex';
-            //mapas.style.display='flex'
-            
+            //Establecer los contenidos de forma que contengan los datos cargados del campo
             htmlCard = ''
                 htmlCard = `
                     <h2>Elecciones ${PeriodosSelect.value} | Generales </h2>
@@ -204,7 +200,7 @@ async function filtrarYConsultar(){
                     `;
                 titulo.innerHTML = htmlCard;
 
-            //cambiar 
+            
             mesas.innerHTML = `
                 <p>Mesas escrutadas</P>
                 <p>${data.estadoRecuento.mesasTotalizadas}</p>
@@ -217,7 +213,8 @@ async function filtrarYConsultar(){
                 <p>Participacion sobre escrutado</P>
                 <p>${data.estadoRecuento.participacionPorcentaje}%</p>
                 `;
-                
+               
+            //Mostrar Mapa 
                mapaElemento.innerHTML= mapasProvincia[distritos.value];
                nombreElemento.innerHTML = nombresProvincia[distritos.value]
 
@@ -228,9 +225,9 @@ async function filtrarYConsultar(){
             const agrupacionPolitica = document.createElement("div");
             agrupacionPolitica.classList.add("agrupacionPolitica");
 
-
+            // busca en el array de valoresTotalizadosPositivos el idAgrupacion  
             valoresTotalizadosPositivos.forEach((valor) => {
-                
+                // en caso de que el id de agrupacion coincida con la paleta de colores se establece un color pleno y uno liviano para la barra de porcentajes
                 if (colores[valor.idAgrupacion]) {
                     colorPleno = colores[valor.idAgrupacion].colorPleno;
                     colorLiviano = colores[valor.idAgrupacion].colorLiviano;
@@ -238,13 +235,13 @@ async function filtrarYConsultar(){
                     colorPleno = colores.defaultColor.colorPleno;
                     colorLiviano = colores.defaultColor.colorLiviano;
                 }
-              
+                //Se carga en el html parte por parte, siguiendo la dinamica del DOM de la primera parte
                 const nombreAgrupacion = valor.nombreAgrupacion;
                 const PorcentajedeVotos = valor.votosPorcentaje;
-              
+                
                 const nombreAgrupacionSubtitulo = document.createElement("p");
-                nombreAgrupacionSubtitulo.classList.add('subTitulo', 'tituloAgrup');
-                nombreAgrupacion.textContent = nombreAgrupacion;
+                nombreAgrupacionSubtitulo.classList.add('subTitulo','tituloAgrup');
+                nombreAgrupacionSubtitulo.textContent = nombreAgrupacion;
 
                 const partidos = document.createElement("div");
                 partidos.classList.add("partidos");
@@ -259,12 +256,12 @@ async function filtrarYConsultar(){
                 const porcentajeLista = document.createElement("p");
                 porcentajeLista.classList.add("peso");
                 porcentajeLista.textContent = `${(valor.votos * 100 / valor.votos)}%`;
-                const votosLista = document.createElement("p");
+                const votosLista = document.createElement("p");                
                 votosLista.classList.add("peso");
                 votosLista.textContent = `${valor.votos} VOTOS`;
                 PorcentajedeVotosLista.appendChild(porcentajeLista);
                 PorcentajedeVotosLista.appendChild(votosLista);
-                lista.appendChild(nombreLista);
+                lista.appendChild(nombreLista);                   
                 lista.appendChild(PorcentajedeVotosLista);
                 partidos.appendChild(lista);
                 const progress = document.createElement("div");
@@ -284,11 +281,11 @@ async function filtrarYConsultar(){
                 agrupacionPolitica.appendChild(progress);
                 Grafico.appendChild(agrupacionPolitica);
             })
+            //Barra de votos
             const contenedorBarras = document.getElementById("barravotos");
             contenedorBarras.innerHTML = "";
-    
+            //Recorremos el array valoresTotalizadosPositivos con maximo 7 y validamos si el id de agrupacion coincide con los colores
             valoresTotalizadosPositivos.slice(0,7).forEach((valor) => {
-              // ... (código existente para obtener datos de la agrupación política)
               if (colores[valor.idAgrupacion]){
                 colorPleno = colores[valor.idAgrupacion].colorPleno
               } else {
@@ -296,12 +293,12 @@ async function filtrarYConsultar(){
              }
                 const nombreAgrupacion = valor.nombreAgrupacion;
                 const PorcentajedeVotos = valor.votosPorcentaje;
-              
+              //se crea un div para establecer las barras con sus datos correspondientes
               const barra = document.createElement("div");
               const PorcentajedeVotosNombre = parseFloat(PorcentajedeVotos);
               const titulo = nombreAgrupacion + " " + PorcentajedeVotosNombre + "%";
               barra.title = titulo;
-    
+             // Utiliza setProperty para cambiar el color de fondo 
               barra.classList.add("bar");
               barra.style.setProperty("--bar-value", `${ PorcentajedeVotos }%`);
               barra.style.setProperty("--bar-color", colorPleno);
@@ -311,12 +308,13 @@ async function filtrarYConsultar(){
             });
         }
     } catch (error) {
-        //  // Manejar errores de red u otros errores imprevistos
+         // Manejar errores de red u otros errores imprevistos
         console.error(`Ocurrió un error inesperado: ${error.message}`);
     }
 
 
 }
+// agregamos un addEvent para que cuando haga click en agregar informe se almacenen los datos
 const agregarInforme = document.getElementById("agrInforme");
 agregarInforme.addEventListener("click", async () => {
     const anioEleccion = PeriodosSelect.value;
